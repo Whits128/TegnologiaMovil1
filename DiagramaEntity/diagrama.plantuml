@@ -1,0 +1,75 @@
+ @startuml Diagrama
+
+entity Cliente {
+  + dni : int (PK)
+  nombre : varchar(50)
+  apellidos : varchar(50)
+  direccion : varchar(100)
+  telefono : varchar(20)
+}
+
+entity TarjetaCredito {
+  + id : int (PK)
+  numero : varchar(16)
+  fecha_vencimiento : date
+  codigo_seguridad : varchar(4)
+  cliente_dni : int (FK)
+}
+
+entity Tren {
+  + codigo : int (PK)
+  numero_plazas : int
+}
+
+entity Reserva {
+  + numero_reserva : int (PK)
+  fecha : date
+  cliente_dni : int (FK)
+  tren_codigo : int (FK)
+}
+
+entity Asiento {
+  + id : int (PK)
+  fila : int
+  columna : int
+  planta : int
+}
+
+entity Boleto {
+  + numero_boleto : int (PK)
+  fecha_emision : date
+  reserva_numero : int (FK)
+  asiento_id : int (FK)
+}
+
+entity Estacion {
+  + id : int (PK)
+  codigo : int
+  nombre : varchar(100)
+  localidad : varchar(100)
+  pais : varchar(100)
+}
+
+entity Viaje {
+  + codigo : int (PK)
+  fecha_salida : date
+  fecha_llegada : date
+  estacion_salida_id : int (FK)
+  estacion_llegada_id : int (FK)
+}
+
+Cliente ||--o{ TarjetaCredito
+Cliente ||--o{ Reserva
+TarjetaCredito }o--|| Cliente
+Tren ||--o{ Reserva
+Reserva }o--|| Cliente
+Reserva }o--|| Tren
+Reserva }o--|| Boleto
+Asiento }o--|| Boleto
+Reserva ||--o{ Boleto
+Estacion ||--o{ Viaje
+Viaje }o--|| Estacion
+Viaje ||--o{ Reserva
+Estacion }o--|{ Viaje
+
+@enduml
